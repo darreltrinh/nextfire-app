@@ -96,11 +96,11 @@ function CreateNewPost(): JSX.Element {
         className={styles.input}
       />
       <p>
-        <strong>Slug:</strong> {slug}
+        <strong>Slug:</strong> {encodeURI(kebabCase(title))}
       </p>
-      <button type="submit" disabled={!isValid} className="btn-green">
+      <button type="submit" disabled={!(title.length > 3 && title.length < 100)} className="btn-green">
         Create New Post
       </button>
     </form>
   );
-}
+  }

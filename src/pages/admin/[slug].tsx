@@ -56,34 +56,36 @@ function PostManager(): JSX.Element {
     ),
     slug as string
   ).withConverter(postConverter);
+  
+  // Moved outside the if statement
   const [post] = useDocumentData<PostType>(postRef);
+
+  if (!post) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <main className= {styles.container}>
-      {post && (
-        <>
-          <section>
-            <h1>{post.title}</h1>
-            <p>ID: {post.slug}</p>
+      <section>
+        <h1>{post.title}</h1>
+        <p>ID: {post.slug}</p>
 
-            <PostForm
-              postRef={postRef}
-              defaultValues={post}
-              preview={preview}
-            />
-          </section>
+        <PostForm
+          postRef={postRef}
+          defaultValues={post}
+          preview={preview}
+        />
+      </section>
 
-          <aside>
-            <h3>Tools</h3>
-            <button onClick={() => setPreview(!preview)}>
-              {preview ? "Edit" : "Preview"}
-            </button>
-            <Link href={`/${post.username}/${post.slug}`}>
-              <button className="btn-blue">Live view</button>
-            </Link>
-          </aside>
-        </>
-      )}
+      <aside>
+        <h3>Tools</h3>
+        <button onClick={() => setPreview(!preview)}>
+          {preview ? "Edit" : "Preview"}
+        </button>
+        <Link href={`/${post.username}/${post.slug}`}>
+          <button className="btn-blue">Live view</button>
+        </Link>
+      </aside>
     </main>
   );
 }
