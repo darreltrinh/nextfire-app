@@ -41,9 +41,6 @@ const postConverter: FirestoreDataConverter<PostType> = {
 };
 
 function PostManager(): JSX.Element {
-  if (!auth.currentUser) {
-    return <></>;
-  }
   const [preview, setPreview] = useState(false);
 
   const router = useRouter();
@@ -51,13 +48,11 @@ function PostManager(): JSX.Element {
 
   const postRef = doc(
     collection(
-      doc(collection(firestore, "users"), auth.currentUser.uid as string),
+      doc(collection(firestore, "users"), auth.currentUser?.uid as string),
       "posts"
     ),
     slug as string
   ).withConverter(postConverter);
-  
-  // Moved outside the if statement
   const [post] = useDocumentData<PostType>(postRef);
 
   if (!post) {
@@ -65,7 +60,7 @@ function PostManager(): JSX.Element {
   }
 
   return (
-    <main className= {styles.container}>
+    <main className={styles.container}>
       <section>
         <h1>{post.title}</h1>
         <p>ID: {post.slug}</p>
@@ -89,6 +84,7 @@ function PostManager(): JSX.Element {
     </main>
   );
 }
+
 
 type PostFormProps = {
   defaultValues: PostType;
