@@ -39,7 +39,7 @@ function CreateNewPost(): JSX.Element {
       title,
       slug,
       uid,
-      username,
+      username, // username from UserContext
       published: false,
       content: '# hello world!',
       createdAt: serverTimestamp() as Timestamp,
@@ -72,4 +72,5 @@ function CreateNewPost(): JSX.Element {
       </button>
     </form>
   );
-  }
+}
+
