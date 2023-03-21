@@ -11,37 +11,6 @@ import toast from 'react-hot-toast';
 import { Post as PostType } from '@/lib/types';
 import { collection, doc, setDoc, orderBy, query, Timestamp } from 'firebase/firestore';
 
-export default function AdminPostsPage(): JSX.Element {
-  return (
-    <main>
-      <AuthCheck>
-        <PostList />
-        <CreateNewPost />
-      </AuthCheck>
-    </main>
-  );
-}
-
-function PostList(): JSX.Element {
-  if (!auth.currentUser) {
-    return <></>;
-  }
-
-  const ref = collection(doc(collection(firestore, 'users'), auth.currentUser.uid), 'posts');
-  const q = query(ref, orderBy('createdAt'));
-  const [querySnapshot] = useCollection(q);
-
-  const posts: PostType[] | undefined = querySnapshot?.docs.map((doc) => doc.data() as PostType);
-
-  return (
-    <>
-      <h1>Manage your Posts</h1>
-      <PostFeed posts={posts} admin />
-    </>
-  );
-}
-
-
 function CreateNewPost(): JSX.Element {
   const router = useRouter();
   const { username } = useContext(UserContext);
