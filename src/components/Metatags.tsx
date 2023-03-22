@@ -9,8 +9,8 @@ interface MetatagsProps {
 }
 
 const Metatags: React.FC<MetatagsProps> = ({
-  title = 'The Full Next.js + Firebase Course',
-  description = 'A complete Next.js + Firebase course by Fireship.io',
+  title = 'wavey baby blogs',
+  description = 'unfortunately, i am about to get sexier',
   image = 'https://fireship.io/courses/react-next-firebase/img/featured.png',
 }) => {
   return (

@@ -5,6 +5,7 @@ import { Post as PostType } from '@/lib/types';
 import Loader from '@/components/Loader';
 import { firestore, postToJSON } from '@/lib/firebase';
 import { Timestamp, collectionGroup, startAfter, getDocs, limit, orderBy, where, query as firestoreQuery, serverTimestamp } from 'firebase/firestore';
+import Metatags from '@/components/Metatags';
 
 
 // Max post to query per page
@@ -66,6 +67,7 @@ const Home: React.FC<HomeProps> = ({ posts: initialPosts }) => {
 
   return (
     <main>
+      <Metatags title="wavey baby blogs" />
       <PostFeed posts={posts} />
 
       {!loading && !postsEnd && (
