@@ -15,7 +15,7 @@ export default function HeartButton({ postRef }: HeartButtonProps) {
   useEffect(() => {
     if (!user) return;
 
-    const heartsRef = doc(firestore, `posts/${postRef.id}/hearts/${user.uid}`);
+    const heartsRef = doc(firestore, `posts/${postRef}/hearts/${user.uid}`);
     const unsubscribe = onSnapshot(heartsRef, (doc) => {
       setHearted(doc.exists());
     });
@@ -24,7 +24,7 @@ export default function HeartButton({ postRef }: HeartButtonProps) {
   }, [postRef, user]);
 
   useEffect(() => {
-    const heartsRef = collection(firestore, `posts/${postRef.id}/hearts`);
+    const heartsRef = collection(firestore, `posts/${postRef}/hearts`);
     const unsubscribe = onSnapshot(heartsRef, (querySnapshot) => {
       setHeartCount(querySnapshot.size);
     });
@@ -33,7 +33,7 @@ export default function HeartButton({ postRef }: HeartButtonProps) {
   }, [postRef]);
 
   const addHeart = async () => {
-    const heartsCollectionRef = collection(firestore, `posts/${postRef.id}/hearts`);
+    const heartsCollectionRef = collection(firestore, `posts/${postRef}/hearts`);
     const batch = writeBatch(firestore);
   
     batch.set(doc(heartsCollectionRef, user?.uid), { uid: user?.uid });
@@ -43,7 +43,7 @@ export default function HeartButton({ postRef }: HeartButtonProps) {
   };
   
   const removeHeart = async () => {
-    const heartsCollectionRef = collection(firestore, `posts/${postRef.id}/hearts`);
+    const heartsCollectionRef = collection(firestore, `posts/${postRef}/hearts`);
     const batch = writeBatch(firestore);
   
     batch.delete(doc(heartsCollectionRef, user?.uid));
