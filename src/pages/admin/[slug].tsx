@@ -41,9 +41,6 @@ const postConverter: FirestoreDataConverter<PostType> = {
 };
 
 function PostManager(): JSX.Element {
-  if (!auth.currentUser) {
-    return <></>;
-  }
   const [preview, setPreview] = useState(false);
 
   const router = useRouter();
@@ -51,42 +48,43 @@ function PostManager(): JSX.Element {
 
   const postRef = doc(
     collection(
-      doc(collection(firestore, "users"), auth.currentUser.uid as string),
+      doc(collection(firestore, "users"), auth.currentUser?.uid as string),
       "posts"
     ),
     slug as string
   ).withConverter(postConverter);
   const [post] = useDocumentData<PostType>(postRef);
 
+  if (!post) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <main className= {styles.container}>
-      {post && (
-        <>
-          <section>
-            <h1>{post.title}</h1>
-            <p>ID: {post.slug}</p>
+    <main className={styles.container}>
+      <section>
+        <h1>{post.title}</h1>
+        <p>ID: {post.slug}</p>
 
-            <PostForm
-              postRef={postRef}
-              defaultValues={post}
-              preview={preview}
-            />
-          </section>
+        <PostForm
+          postRef={postRef}
+          defaultValues={post}
+          preview={preview}
+        />
+      </section>
 
-          <aside>
-            <h3>Tools</h3>
-            <button onClick={() => setPreview(!preview)}>
-              {preview ? "Edit" : "Preview"}
-            </button>
-            <Link href={`/${post.username}/${post.slug}`}>
-              <button className="btn-blue">Live view</button>
-            </Link>
-          </aside>
-        </>
-      )}
+      <aside>
+        <h3>Tools</h3>
+        <button onClick={() => setPreview(!preview)}>
+          {preview ? "Edit" : "Preview"}
+        </button>
+        <Link href={`/${post.username}/${post.slug}`}>
+          <button className="btn-blue">Live view</button>
+        </Link>
+      </aside>
     </main>
   );
 }
+
 
 type PostFormProps = {
   defaultValues: PostType;
