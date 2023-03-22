@@ -30,15 +30,16 @@ export default function AdminPostsPage(): JSX.Element {
 }
 
 function PostList(): JSX.Element {
-  if (!auth.currentUser) {
-    return <></>;
-  }
-
-  const ref = collection(doc(collection(firestore, 'users'), auth.currentUser.uid), 'posts');
+  const ref = collection(
+    doc(collection(firestore, 'users'), auth.currentUser?.uid ?? ''),
+    'posts'
+  );
   const q = query(ref, orderBy('createdAt'));
-  const [querySnapshot] = useCollection(q);
+  const [querySnapshot] = useCollection(auth.currentUser ? q : null);
 
-  const posts: PostType[] | undefined = querySnapshot?.docs.map((doc) => doc.data() as PostType);
+  const posts: PostType[] | undefined = querySnapshot?.docs.map(
+    (doc) => doc.data() as PostType
+  );
 
   return (
     <>
@@ -47,6 +48,7 @@ function PostList(): JSX.Element {
     </>
   );
 }
+
 
 function CreateNewPost(): JSX.Element {
   const router = useRouter();
