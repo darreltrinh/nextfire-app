@@ -5,6 +5,7 @@ import { signInWithPopup, signOut } from 'firebase/auth';
 import { doc, getDoc, writeBatch } from 'firebase/firestore';
 import { auth, firestore, googleAuthProvider } from '@/lib/firebase';
 import { UserContext } from '@/lib/context';
+import Loader from '@/components/Loader';
 
 interface MetatagsProps {
   title: string;
@@ -27,6 +28,7 @@ export default function Enter(): React.ReactNode {
     </main>
   );
 }
+
 function Metatags({ title, description }: MetatagsProps): JSX.Element {
   return (
     <Head>
@@ -61,8 +63,27 @@ function UsernameForm(): JSX.Element | null {
   const [formValue, setFormValue] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [checkingUser, setCheckingUser] = useState<boolean>(true);
 
   const { user, username } = useContext(UserContext);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!user) return;
+  
+      const userDoc = doc(firestore, `users/${user.uid}`);
+      const userDocSnapshot = await getDoc(userDoc);
+  
+      if (userDocSnapshot.exists()) {
+        setCheckingUser(false);
+      } else {
+        setCheckingUser(false);
+      }
+    };
+  
+    fetchUser();
+  }, [user]);
+  
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -117,9 +138,8 @@ function UsernameForm(): JSX.Element | null {
     []
   );
   
-
   return (
-    !username ? (
+    !username && !checkingUser ? (
       <section>
         <h3>Choose Username</h3>
         <form onSubmit={onSubmit}>
@@ -128,7 +148,7 @@ function UsernameForm(): JSX.Element | null {
           <button type="submit" className="btn-green" disabled={!isValid}>
             Choose
           </button>
-
+  
           <h3>Debug State</h3>
           <div>
             Username: {formValue}
@@ -139,9 +159,11 @@ function UsernameForm(): JSX.Element | null {
           </div>
         </form>
       </section>
+    ) : checkingUser ? (
+      <Loader show={checkingUser} />
     ) : null
   );
-}
+}  
 
 function UsernameMessage({ username, isValid, loading }: UsernameMessageProps): JSX.Element {
   if (loading) {
