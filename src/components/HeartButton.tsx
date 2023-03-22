@@ -63,7 +63,7 @@ export default function HeartButton({ postRef }: HeartButtonProps) {
 
   return (
     <button onClick={hearted ? removeHeart : addHeart}>
-      {hearted ? "💔 Unheart" : "💗 Heart"} ({heartCount})
+      {hearted ? "💔 Unheart" : "💗 Heart"}
     </button>
   );
 }
