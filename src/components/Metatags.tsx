@@ -11,7 +11,7 @@ interface MetatagsProps {
 const Metatags: React.FC<MetatagsProps> = ({
   title = 'wavey baby blogs',
   description = 'unfortunately, i am about to get sexier',
-  image = 'https://github.com/darreltrinh/nextfire-app/blob/usernameform-bug-fix-loader/public/the_big_man.jpeg',
+  image = '/the_big_man.jpeg',
 }) => {
   return (
     <Head>
